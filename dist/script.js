@@ -1,7 +1,120 @@
-const translations={en:{navServices:'Services',navWork:'Work',navApproach:'Approach',navAbout:'About',navContact:'Let’s talk',heroEyebrow:'PRODUCT STRATEGY · APPLIED AI · AUTOMATION',heroTitle:'Useful digital products, from idea to validation.',heroLede:'I work with teams to turn opportunities into products: clarifying the problem, designing the solution, and building prototypes, integrations, and automations ready to test.',heroCta:'Let’s talk',heroLink:'See the work',artOneTitle:'Focus',artOneCopy:'the problem',artTwoTitle:'Build',artTwoCopy:'something useful',artThreeTitle:'Learn',artThreeCopy:'from real use',servicesEyebrow:'HOW I CAN HELP',servicesTitle:'Product work that brings an idea closer to reality.',serviceOneTitle:'Strategy and discovery',serviceOneCopy:'I turn uncertain opportunities into clear problems, product direction, and prioritised next steps.',serviceTwoTitle:'Applied AI and automation',serviceTwoCopy:'I find practical ways to bring AI, agents, and automation into experiences and operations.',serviceThreeTitle:'Prototypes and integrations',serviceThreeCopy:'I move from a hypothesis to something testable with no-code tools, APIs, assisted development, and UX.',workEyebrow:'EXPERIENCE',workTitle:'Products built around real operational needs.',workIntro:'Three product cases across learning, travel, and digital operations.',caseOneType:'EDTECH · PRODUCT STRATEGY',caseOneTitle:'Giving educators the tools to teach without carrying the operations.',caseOneCopy:'At Edison, I led strategy and product for a platform that let experts create and sell short live courses, with operations solved by the product.',caseOneItemOne:'Marketplace, checkout, learner portal, and admin console in one ecosystem.',caseOneItemTwo:'More than 200 courses and learning for 6,000 students.',caseOneItemThree:'Operational flows automated with n8n, Airtable, Bubble, and AI agents.',tagStrategy:'Strategy',caseTwoType:'EDTECH · PRODUCT OWNERSHIP',caseTwoTitle:'Making a learning experience scalable and useful.',caseTwoCopy:'At Digital House, I worked on Playground, the LMS for the Certified Tech Developer programme with Mercado Libre.',tagLearning:'Learning UX',tagDelivery:'Delivery',caseThreeType:'TRAVEL TECH · PRODUCT ANALYSIS',caseThreeTitle:'Turning a frustrating reschedule into a digital experience.',caseThreeCopy:'At Despegar, I worked on self-service flows for changes, cancellations, tickets, and rescheduling: moving a complex experience into a clear solution for travellers and operations.',tagService:'Service design',tagOperations:'Operations',approachEyebrow:'HOW I WORK',approachTitle:'Enough structure to move forward and enough proximity to learn quickly.',approachOne:'Discover',approachOneCopy:'Understand the problem, people, and constraints.',approachTwo:'Focus',approachTwoCopy:'Define a viable bet and what matters now.',approachThree:'Build',approachThreeCopy:'Prototype, integrate, and ship the smallest useful version.',approachFour:'Learn',approachFourCopy:'Use feedback and outcomes to improve what comes next.',aboutEyebrow:'ABOUT ALEX',aboutTitle:'Product, technology, and user experience connected.',aboutLead:'I’m Alex Sánchez, a Product Lead and AI Product Builder with more than 12 years connecting business, technology, and user experience.',aboutCopy:'My background spans EdTech, travel, and telecommunications. I have led products from zero and worked across strategy, UX, integrations, and operations.',toolsTitle:'Tools',linkedin:'View LinkedIn',contactEyebrow:'LET’S MAKE SOMETHING USEFUL',contactTitle:'Is there a product opportunity, complex workflow, or AI idea worth testing?',contactCopy:'Let’s talk about turning it into a clear, useful, and testable experience.',footerTagline:'Product strategy, applied AI, and automation.'}};
-const menu=document.querySelector('.menu-toggle'),nav=document.querySelector('#main-nav');
-menu?.addEventListener('click',()=>{const open=nav.classList.toggle('open');menu.setAttribute('aria-expanded',String(open));});
-nav?.querySelectorAll('a').forEach(link=>link.addEventListener('click',()=>{nav.classList.remove('open');menu?.setAttribute('aria-expanded','false');}));
-let language='es';
-document.querySelector('.language-toggle')?.addEventListener('click',()=>{language=language==='es'?'en':'es';document.documentElement.lang=language;document.querySelectorAll('[data-i18n]').forEach(node=>{const key=node.dataset.i18n;if(!node.dataset.es)node.dataset.es=node.textContent.trim();node.textContent=language==='en'?(translations.en[key]||node.dataset.es):node.dataset.es;});document.querySelector('.language-label').textContent=language==='es'?'EN':'ES';document.querySelector('.language-toggle').setAttribute('aria-label',language==='es'?'Cambiar a inglés':'Switch to Spanish');});
-document.querySelector('#year').textContent=new Date().getFullYear();
+const menu = document.querySelector('.menu-toggle');
+const navigation = document.querySelector('#main-nav');
+
+menu?.addEventListener('click', () => {
+  const isOpen = navigation.classList.toggle('open');
+  menu.setAttribute('aria-expanded', String(isOpen));
+});
+
+navigation?.querySelectorAll('a').forEach((link) => link.addEventListener('click', () => {
+  navigation.classList.remove('open');
+  menu?.setAttribute('aria-expanded', 'false');
+}));
+
+document.querySelectorAll('.country-select').forEach((container) => {
+  const select = container.querySelector('select');
+  const flags = container.querySelectorAll('[data-country-flag]');
+  const updateCountryFlag = () => {
+    flags.forEach((flag) => {
+      flag.hidden = flag.dataset.countryFlag !== select.value;
+    });
+  };
+  select.addEventListener('change', updateCountryFlag);
+  updateCountryFlag();
+});
+
+const mountHorizontalSlider = (slider, previous, next) => {
+  if (!slider || !previous || !next) return;
+  const updateControls = () => {
+    const hasOverflow = slider.scrollWidth > slider.clientWidth + 1;
+    previous.disabled = !hasOverflow;
+    next.disabled = !hasOverflow;
+  };
+  const move = (direction) => {
+    const maxScroll = slider.scrollWidth - slider.clientWidth;
+    const startOffset = Number.parseFloat(getComputedStyle(slider).paddingLeft) || 0;
+    if (direction > 0 && slider.scrollLeft >= maxScroll - 1) {
+      slider.scrollTo({ left: 0, behavior: 'smooth' });
+      return;
+    }
+    if (direction < 0 && slider.scrollLeft <= startOffset + 1) {
+      slider.scrollTo({ left: maxScroll, behavior: 'smooth' });
+      return;
+    }
+    slider.scrollBy({ left: direction * Math.min(390, slider.clientWidth), behavior: 'smooth' });
+  };
+  previous.addEventListener('click', () => move(-1));
+  next.addEventListener('click', () => move(1));
+  slider.addEventListener('scroll', updateControls, { passive: true });
+  window.addEventListener('resize', updateControls);
+  updateControls();
+};
+
+mountHorizontalSlider(
+  document.querySelector('.case-grid--experience'),
+  document.querySelector('[data-experience-previous]'),
+  document.querySelector('[data-experience-next]'),
+);
+mountHorizontalSlider(
+  document.querySelector('.service-grid'),
+  document.querySelector('[data-service-previous]'),
+  document.querySelector('[data-service-next]'),
+);
+mountHorizontalSlider(
+  document.querySelector('.approach-carousel ol'),
+  document.querySelector('[data-approach-previous]'),
+  document.querySelector('[data-approach-next]'),
+);
+export function validateContactForm(form) {
+  const values = Object.fromEntries(new FormData(form));
+  const fields = ['name', 'email', 'message'];
+  const firstEmpty = fields.find((name) => !values[name]?.trim());
+  if (firstEmpty) return { valid: false, field: firstEmpty, message: 'Completá los campos obligatorios.' };
+  if (!form.elements.email.validity.valid) return { valid: false, field: 'email', message: 'Revisá el formato del email.' };
+  const whatsapp = values.whatsapp?.trim() ? `${values.countryCode} ${values.whatsapp.trim()}` : '';
+  delete values.countryCode;
+  return { valid: true, values: { ...values, name: values.name.trim(), email: values.email.trim(), message: values.message.trim(), whatsapp } };
+}
+
+export function setContactState(container, state, message = '') {
+  const form = container.querySelector('form');
+  const success = container.querySelector('[data-contact-success]');
+  const status = container.querySelector('[data-form-status]');
+  container.dataset.contactState = state;
+  if (status) status.textContent = message;
+  if (form) form.hidden = state === 'success';
+  if (success) success.hidden = state !== 'success';
+}
+
+export async function submitLead(values, endpoint = '/api/contact') {
+  const response = await fetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(values) });
+  if (!response.ok) throw new Error('Contact request failed');
+  return response.json();
+}
+
+export function mountContactFlow(container, { endpoint = '/api/contact' } = {}) {
+  const form = container.querySelector('form');
+  const submit = form?.querySelector('[type="submit"]');
+  if (!form || !submit) return;
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const result = validateContactForm(form);
+    if (!result.valid) {
+      setContactState(container, 'error', result.message);
+      form.elements[result.field].focus();
+      return;
+    }
+    submit.disabled = true;
+    setContactState(container, 'loading', 'Enviando consulta…');
+    try {
+      await submitLead(result.values, endpoint);
+      form.reset();
+      setContactState(container, 'success');
+      container.querySelector('[data-contact-success]')?.focus();
+    } catch {
+      setContactState(container, 'error', navigator.onLine ? 'No pudimos guardar tu consulta. Intentá nuevamente en unos minutos.' : 'Revisá tu conexión e intentá nuevamente.');
+    } finally { submit.disabled = false; }
+  });
+}
+
+document.querySelectorAll('[data-contact-flow]').forEach((container) => mountContactFlow(container));
