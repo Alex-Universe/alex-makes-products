@@ -16,6 +16,7 @@ Actualizá el contenido en `dist/index.html` y los estilos en `dist/styles.css`.
 - `afd2eb5`: se cambió la invitación genérica de contacto por una propuesta colaborativa.
 - `4f8589a`: se explicitó el objetivo de agregar valor o reducir costos con una solución tecnológica.
 - Se agregó una segunda ilustración animada en metodología, se ordenaron las secciones y el navbar, y se ajustaron el carrusel de servicios y el espaciado.
+- Se añadió el archivo HTML de verificación de Google Search Console en la raíz pública del sitio.
 
 ## Criterios editoriales y de diseño
 
@@ -24,4 +25,5 @@ Actualizá el contenido en `dist/index.html` y los estilos en `dist/styles.css`.
 - Las secciones y el navbar mantienen el mismo orden: Sobre mí, Servicios, Experiencia, Metodología y Contacto. La sección de servicios conserva el encabezado “En qué puedo ayudar”; los iconos del navbar van sobre el texto y miden 16 px.
 - Los carruseles con controles de escritorio deben mostrar un siguiente elemento y permitir un desplazamiento perceptible. En mobile se recorren con gesto horizontal, sin controles manuales visibles.
 - Se evitan separadores lineales entre secciones; el espacio y la agrupación visual organizan el contenido, conservando los bordes de las tarjetas.
+- El archivo `googlea455668b8570b585.html` debe permanecer en la raíz pública después de verificar la propiedad en Search Console; no renombrarlo ni retirarlo.
 - La tipografía y el hero deben conservar legibilidad en mobile, sin desbordamientos.
